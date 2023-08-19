@@ -8,8 +8,8 @@ TAG :=
 endif
 
 build:
-	  go build -o nnmg$(TAG) ./main.go
+	  go build -o ./build/nnmg$(TAG) nnmg.go
 clean:
-		rm nnmg*
+		rm ./build/*
 uninstall:
 	  rm $(GOPATH)/bin/nano-migrate

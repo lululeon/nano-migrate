@@ -26,8 +26,10 @@ USAGE:
    nnmg [global options] command [command options] [arguments...]
 
 COMMANDS:
-   init, i  Initialise the migrations table
-   help, h  Shows a list of commands or help for one command
+   init, i     Initialise the migrations table
+   create, c   Create a new migration
+   migrate, m  Apply all pending (un-applied) migrations
+   help, h     Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --help, -h  show help
