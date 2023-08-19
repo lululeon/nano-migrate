@@ -248,8 +248,13 @@ func CreateMigration(
 	targetName := fmt.Sprintf("%04d-%s.%s", nextId, cleanStr, ext)
 	targetPath := filepath.Join(config.MigrationsDir, targetName)
 
+	p, e := filepath.Abs(targetPath)
+	if e != nil {
+		log.Fatalf("❌ Could not determine absolute file path! %v", e)
+	}
+
 	emptyBytArray := []byte("")
-	eWrite := os.WriteFile(targetPath, emptyBytArray, 0644)
+	eWrite := os.WriteFile(p, emptyBytArray, 0644)
 	if eWrite != nil {
 		log.Fatalf("❌ Could not write to file! %v", eWrite)
 	}

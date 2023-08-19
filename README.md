@@ -45,3 +45,9 @@ nnmg migrate
 ```
 
 That's it!
+
+---
+
+## Contributing
+
+Here's our tiny [contributing](./CONTRIBUTING.md) guide. We especially welcome contributors who are learning go as well as people who want the experience of contributing to a project! :-)

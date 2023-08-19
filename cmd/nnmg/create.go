@@ -25,7 +25,6 @@ func CreateNewMigration(ctx *cli.Context) error {
 	}
 
 	nameArgs := strings.Join(ctx.Args().Slice(), "-")
-	fmt.Printf("Proposed naming: [%s]\n", nameArgs)
 
 	// need a pool for multi-statement queries
 	pool, err := pgxpool.New(ctx.Context, config.PgUrl)

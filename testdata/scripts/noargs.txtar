@@ -1,19 +1,19 @@
 # expect help page if ran with no commands
-exec nnmg
+exec nn:mg
 cmp stdout usage.txt
 ! stderr .
 
 # expect failure if ran with unknown commands
-! exec nnmg totalfoobar
+! exec nn:mg totalfoobar
 stderr 'No help topic'
 
 # help should work with --help
-exec nnmg --help
+exec nn:mg --help
 cmp stdout usage.txt
 ! stderr .
 
 # help should work with 'h'
-exec nnmg h
+exec nn:mg h
 cmp stdout usage.txt
 ! stderr .
 

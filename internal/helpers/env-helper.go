@@ -36,8 +36,8 @@ func getEnv(key string) string {
 }
 
 func LoadConfig() *Config {
-	// must be supplied (e.g. in local dev) if you want to load an env file
-	envpath := getEnv("ENVPATH")
+	// default
+	envpath := "./.env"
 
 	if !IsBlank(envpath) {
 		err := godotenv.Load(envpath)
