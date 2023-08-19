@@ -3,7 +3,6 @@
 
 # built outputs
 build/
-nnmg*
 
 # Binaries for programs and plugins
 *.exe
