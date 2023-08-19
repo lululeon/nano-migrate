@@ -134,7 +134,10 @@ func getLatestCommittedMigrationId(ctx context.Context, pool *pgxpool.Pool, ch c
 	defer rows.Close()
 
 	if rows.Next() {
-		rows.Scan(&id, &name, &hash)
+		eScan := rows.Scan(&id, &name, &hash)
+		if eScan != nil {
+			log.Fatalf("Could not read returned rows! %v\n", err)
+		}
 		fmt.Printf("🔒 Last migration: [%d][%s][%s]\n", id, name, hash)
 		ch <- id
 		return
@@ -143,7 +146,7 @@ func getLatestCommittedMigrationId(ctx context.Context, pool *pgxpool.Pool, ch c
 	ch <- 0
 }
 
-func runMigration(ctx context.Context, config *helpers.Config, pool *pgxpool.Pool) {
+func RunMigration(ctx context.Context, config *helpers.Config, pool *pgxpool.Pool) {
 	fsys := os.DirFS(config.MigrationsDir)
 	files, errFindAllFiles := allFiles(fsys)
 	if errFindAllFiles != nil {
@@ -188,10 +191,17 @@ func runMigration(ctx context.Context, config *helpers.Config, pool *pgxpool.Poo
 
 		if ok {
 			fmt.Printf("✅ Committing: %s\n", fingerprint)
-			tx.Commit(ctx)
+			eTrxn := tx.Commit(ctx)
+			if eTrxn != nil {
+				log.Panicln("❌Dagnammit... the commit transaction failed!! 😫")
+				ok = false
+			}
 		} else {
 			fmt.Printf("❌ Failed - Rolling Back: %s\n", fingerprint)
-			tx.Rollback(ctx)
+			eTrxn := tx.Rollback(ctx)
+			if eTrxn != nil {
+				log.Panicln("💣Uhm... so... the rollback ALSO failed. OMG. 💀")
+			}
 			break //stop processing
 		}
 	}
@@ -204,7 +214,7 @@ func runMigration(ctx context.Context, config *helpers.Config, pool *pgxpool.Poo
 	}
 }
 
-func createMigration(
+func CreateMigration(
 	ctx context.Context,
 	config *helpers.Config,
 	pool *pgxpool.Pool,
@@ -239,52 +249,9 @@ func createMigration(
 	targetPath := filepath.Join(config.MigrationsDir, targetName)
 
 	emptyBytArray := []byte("")
-	os.WriteFile(targetPath, emptyBytArray, 0644)
+	eWrite := os.WriteFile(targetPath, emptyBytArray, 0644)
+	if eWrite != nil {
+		log.Fatalf("❌ Could not write to file! %v", eWrite)
+	}
 	fmt.Printf("✨ New migration file ready: %s\n", targetName)
 }
-
-// Old entrypoints
-/*
-func main() {
-	ctx := context.Background()
-	helpTxt := "Must provide a valid command to execute: init|create|migrate."
-	createHelpTxt := "The create command requires a name for your migration."
-
-	if len(os.Args) < 2 {
-		fmt.Println(helpTxt)
-		os.Exit(0)
-	} else {
-		config := helpers.LoadConfig()
-
-		// need a pool for multi-statement queries
-		pool, err := pgxpool.New(ctx, config.PgUrl)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Unable to create connection pool: %v\n", err)
-			os.Exit(1)
-		}
-		defer pool.Close()
-
-		switch cmd := os.Args[1]; cmd {
-		case "init":
-			initialiseMigrations(ctx)
-		case "migrate":
-			runMigration(ctx, config, pool)
-		case "create", "create-meta":
-			if len(os.Args) < 3 {
-				fmt.Println(createHelpTxt)
-				break
-			}
-			nameArgs := strings.Join(os.Args[2:], "-")
-			if cmd == "create" {
-				createMigration(ctx, config, pool, nameArgs, "core")
-			} else {
-				// create meta migration. only authz metadata for now:
-				createMigration(ctx, config, pool, nameArgs, "authz")
-			}
-		default:
-			fmt.Println(helpTxt)
-		}
-	}
-	os.Exit(0)
-}
-*/

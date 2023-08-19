@@ -20,6 +20,18 @@ func Main() int {
 				Usage:   "Initialise the migrations table",
 				Action:  InitialiseMigrations,
 			},
+			{
+				Name:    "create",
+				Aliases: []string{"c"},
+				Usage:   "Create a new migration",
+				Action:  CreateNewMigration,
+			},
+			{
+				Name:    "migrate",
+				Aliases: []string{"m"},
+				Usage:   "Apply all pending (un-applied) migrations",
+				Action:  ApplyMigrations,
+			},
 		},
 	}
 

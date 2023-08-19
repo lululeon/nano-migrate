@@ -45,7 +45,3 @@ nnmg migrate
 ```
 
 That's it!
-
-## Detailed Configuration
-
-(todo)
