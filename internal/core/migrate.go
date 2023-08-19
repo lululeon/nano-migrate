@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
-	"nano-migrate/helpers"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/netterminalmachine/nano-migrate/internal/helpers"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
