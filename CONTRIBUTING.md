@@ -16,14 +16,15 @@ To set up your dev environment for working with this repo, run `make setup`.
 
 Here are the list of commands you can use in your local sandbox:
 
-| command       | description                                                                                            |
-| ------------- | ------------------------------------------------------------------------------------------------------ |
-| `make setup`  | Set up your local sandbox for working on nano-migrate. Probably only need to do this once!             |
-| `make pgup`   | Start a containerized postgres instance (it will run on the default `:5432` port (but see note below). |
-| `make pgdown` | Bring down the database                                                                                |
-| `make test`   | tests the application                                                                                  |
-| `make clean`  | deletes everything in the `build/` directory.                                                          |
-| `make ls`     | lists all the migration files in the migrations folder.                                                |
+| command        | description                                                                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
+| `make setup`   | Set up your local sandbox for working on nano-migrate. Probably only need to do this once!             |
+| `make pgup`    | Start a containerized postgres instance (it will run on the default `:5432` port (but see note below). |
+| `make pgdown`  | Bring down the database                                                                                |
+| `make test`    | tests the application and generates a test report                                                      |
+| `make testcov` | generates a coverage report                                                                            |
+| `make clean`   | deletes everything in the `build/` directory.                                                          |
+| `make ls`      | lists all the migration files in the migrations folder.                                                |
 
 :pencil: **Notes**:
 
