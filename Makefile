@@ -1,3 +1,6 @@
+# Use `make V=1` to print commands.
+$(V).SILENT:
+
 .PHONY: build
 
 # invoke make with VERSION=n.n.n
@@ -20,11 +23,19 @@ pgdown:
 
 # building and testing
 build:
-	  go build -o ./build/nnmg$(TAG) nnmg.go
+		go build -o ./build/nnmg$(TAG) nnmg.go
 test:
 		make clean
 		make build
-		go test
+		clear
+		echo "\n=== 📜 TEST RESULTS ===\n"
+		gotestsum --format testname
+testcov:
+		go test -coverpkg=./... -coverprofile=coverage.out ./...
+		clear
+		echo "\n=== 📜 TEST COVERAGE REPORT ===\n"
+		go tool cover -func=coverage.out
+
 
 # see list of migrations
 ls:
@@ -34,4 +45,4 @@ ls:
 clean:
 		rm ./build/*
 uninstall:
-	  rm $(GOPATH)/bin/nano-migrate
+		rm $(GOPATH)/bin/nano-migrate
